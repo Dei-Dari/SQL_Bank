@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 18.00
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{81AF1BF2-5102-46A7-800E-0E5CC7053957}"
+	ProjectSection(SolutionItems) = preProject
+		CREATE.sql = CREATE.sql
+		DATA_Test_1.sql = DATA_Test_1.sql
+		DATA_Test_2.sql = DATA_Test_2.sql
+		Diagram.jpg = Diagram.jpg
+		REPORT.sql = REPORT.sql
+		SHIFT_CFTBANK_Dev_TestTask.pdf = SHIFT_CFTBANK_Dev_TestTask.pdf
+		..\TEST1.sql = ..\TEST1.sql
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31AB558F-95B7-4CFD-93C4-9097EF517CF5}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ACFEBB3D-12B1-4D6D-962F-F6D229F7A196}
+	EndGlobalSection
+EndGlobal
