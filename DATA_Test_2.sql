@@ -41,14 +41,14 @@ DECLARE @i INT = 0,
 DECLARE @TestTable TABLE ([NN] INT, [WC] INT)
 
 
-----INSERT INTO [CLIENTS] ќбслуживание клиента в банке начинаетс¤ с заведени¤ карточки клиента (таблица CLIENTS),
+----INSERT INTO [CLIENTS] Обслуживание клиента в банке начинается с заведения карточки клиента (таблица CLIENTS),
 --SET @TestPreviousDate = DATEADD(YEAR,-@RangeYear,@CurrentDate)
 
 --WHILE (@i < @N)
 --BEGIN
 --	SET @TestDate = DATEADD(DAY, FLOOR(RAND()*DATEDIFF(DAY,@TestPreviousDate,@CurrentDate)),@TestPreviousDate);	
 --	SET @TestPass = @i
---	--”Ќ» јЋ№Ќќ—“№ ѕј—ѕќ–“ј (—≈–»я Ќќћ≈–)
+--	--УНИКАЛЬНОСТЬ ПАСПОРТА (СЕРИЯ НОМЕР)
 
 --	INSERT INTO [CLIENTS]
 --	VALUES (@TestName + CHAR(ASCII(@i)), @TestAddress + CHAR(ASCII(@i)), @TestDate, @TestAddress + CHAR(ASCII(@i)), @TestPass)
@@ -57,16 +57,16 @@ DECLARE @TestTable TABLE ([NN] INT, [WC] INT)
 --GO
 
 
-----INSERT INTO [PRODUCTS] далее клиент выражает завести тот или иной продукт в банке -  –≈ƒ»“, ƒ≈ѕќ«»“,  ј–“ј (таблица PRODUCT_TYPE) 
-----ѕосле оформлени¤ документов в банке создаетс¤ экземпл¤р продукта (таблица PRODUCTS)
+----INSERT INTO [PRODUCTS] далее клиент выражает завести тот или иной продукт в банке - КРЕДИТ, ДЕПОЗИТ, КАРТА (таблица PRODUCT_TYPE) 
+----После оформления документов в банке создается экземпляр продукта (таблица PRODUCTS)
 --SET @i = 0
 --WHILE (@i < @N)
 --BEGIN
 --	SET @TestProductType = 1 + RAND() * 3
 --	SET @TestProductTypeName = CASE @TestProductType
---		WHEN '1' THEN ' редитный договор с: '
---		WHEN '2' THEN 'ƒепозитный договор с: '
---		WHEN '3' THEN ' арточный договор с: '
+--		WHEN '1' THEN 'Кредитный договор с: '
+--		WHEN '2' THEN 'Депозитный договор с: '
+--		WHEN '3' THEN 'Карточный договор с: '
 --	END;
 --	SET @TestClientID = (SELECT TOP 1 [ID] FROM [CLIENTS] ORDER BY NEWID())
 --	SET @TestName = (SELECT [NAME] FROM [CLIENTS] WHERE [CLIENTS].[ID] = @TestClientID)
@@ -79,9 +79,9 @@ DECLARE @TestTable TABLE ([NN] INT, [WC] INT)
 --END;
 
 
-----INSERT INTO [ACCOUNTS] в рамках продукта открываетс¤ один или несколько счетов (таблица ACCOUNTS) с остатком равным 0
-----ѕример: 40817810099910004312, в котором 408 Ч означает, что это счЄт физического лица, 17 Ч счЄт резидента –‘, бессрочный, 810 Ч валюта рубли –‘, 0 Ч контрольна¤ цифра в данном случае, 9991 Ч код подразделени¤ банка (иногда - часть номера счЄта), 0004312 Ч сам номер счЄта.
-----Ѕ»  040000000
+----INSERT INTO [ACCOUNTS] в рамках продукта открывается один или несколько счетов (таблица ACCOUNTS) с остатком равным 0
+----Пример: 40817810099910004312, в котором 408 — означает, что это счёт физического лица, 17 — счёт резидента РФ, бессрочный, 810 — валюта рубли РФ, 0 — контрольная цифра в данном случае, 9991 — код подразделения банка (иногда - часть номера счёта), 0004312 — сам номер счёта.
+----БИК 040000000
 --SET @i = 1
 --SET @TestB = SUBSTRING(@TestBIC,LEN(@TestBIC) - 3 + 1, 3) + @TestB
 --SET @j = 1
@@ -96,9 +96,9 @@ DECLARE @TestTable TABLE ([NN] INT, [WC] INT)
 --BEGIN
 --	SET @TestProductType = (SELECT [PRODUCT_TYPE_ID] FROM [PRODUCTS] WHERE [PRODUCTS].[ID] = @i)
 --	SET @TestProductTypeName = CASE @TestProductType
---		WHEN '1' THEN ' редитный счет: '
---		WHEN '2' THEN 'ƒепозитный счет: '
---		WHEN '3' THEN ' арточный счет: '
+--		WHEN '1' THEN 'Кредитный счет: '
+--		WHEN '2' THEN 'Депозитный счет: '
+--		WHEN '3' THEN 'Карточный счет: '
 --	END;
 --	SET @TestClientID = (SELECT [CLIENT_REF] FROM [PRODUCTS] WHERE [PRODUCTS].[ID] = @i)
 --	SET @TestName = (SELECT [NAME] FROM [CLIENTS] WHERE [CLIENTS].[ID] = @TestClientID)
@@ -134,18 +134,18 @@ DECLARE @TestTable TABLE ([NN] INT, [WC] INT)
 
 
 
---INSERT INTO [RECORDS] ƒалее в случае, если оформлен продукт типа  –≈ƒ»“ по счету продукта проходит
---дебетова¤ операци¤ Ц банк выдает деньги клиенту (в таблице RECORDS по¤вл¤етс¤ запись с
---полем DT = 1 и суммой зачислени¤, запись в таблице RECORDS вли¤ет на поле SALDO таблицы
---ACCOUNTS). ≈сли оформлен продукт ƒ≈ѕќ«»“ или  ј–“ј по счету клиента проходит
---кредитова¤ операци¤ Ц клиент вносит средства на счета (в таблице RECORDS по¤вл¤етс¤
---запись с полем DT = 0 и суммой зачислени¤, запись в таблице RECORDS вли¤ет на поле SALDO
+--INSERT INTO [RECORDS] Далее в случае, если оформлен продукт типа КРЕДИТ по счету продукта проходит
+--дебетовая операция – банк выдает деньги клиенту (в таблице RECORDS появляется запись с
+--полем DT = 1 и суммой зачисления, запись в таблице RECORDS влияет на поле SALDO таблицы
+--ACCOUNTS). Если оформлен продукт ДЕПОЗИТ или КАРТА по счету клиента проходит
+--кредитовая операция – клиент вносит средства на счета (в таблице RECORDS появляется
+--запись с полем DT = 0 и суммой зачисления, запись в таблице RECORDS влияет на поле SALDO
 --таблицы ACCOUNTS).
---ѕосле чего клиент в случае, если ему открыт продукт типа  –≈ƒ»“, вносит средства на
---счет, погаша¤ кредит, а если продукт типа ƒ≈ѕќ«»“ или  ј–“ј, может списывать средства
---со счета. ѕосле полного погашени¤ продукта типа  –≈ƒ»“, выдача кредита может
---происходить снова, и клиент нужно оп¤ть осуществл¤ть погашени¤. ≈сли у клиента
---продукта типа ƒ≈ѕќ«»“ или  ј–“ј, клиент в любое врем¤ может внести средства.
+--После чего клиент в случае, если ему открыт продукт типа КРЕДИТ, вносит средства на
+--счет, погашая кредит, а если продукт типа ДЕПОЗИТ или КАРТА, может списывать средства
+--со счета. После полного погашения продукта типа КРЕДИТ, выдача кредита может
+--происходить снова, и клиент нужно опять осуществлять погашения. Если у клиента
+--продукта типа ДЕПОЗИТ или КАРТА, клиент в любое время может внести средства.
 
 SET @i = 4
 SET @N = (SELECT COUNT(*) FROM [ACCOUNTS])	--кол-во счетов
@@ -170,7 +170,7 @@ BEGIN
 	SET @TestName = (SELECT [NAME] FROM [ACCOUNTS] WHERE [ID] = @IID)
 	--PRINT 'NAME ACC ' + @TestName
 	--SET @TestSaldo = (SELECT [SALDO] FROM [ACCOUNTS] WHERE [ID] = @IID)
-	--—„≈“ј — Ќ”Ћ≈¬џћ —јЋ№ƒќ
+	--СЧЕТА С НУЛЕВЫМ САЛЬДО
 	SET @TestSaldo = 0.00
 	PRINT @TestProductType
 	PRINT @TestSaldo
@@ -191,11 +191,11 @@ BEGIN
 	WHILE (@j <= @Nj)
 	BEGIN	
 		PRINT '@i ' + CONVERT(VARCHAR, @i) + ' @j ' + CONVERT(VARCHAR, @j) + ' ' + @TestName
-		IF (@TestDT = 0)	--ƒ≈ѕќ«»“ или  ј–“ј, клиент в любое врем¤ может внести средства, с 0.00
+		IF (@TestDT = 0)	--ДЕПОЗИТ или КАРТА, клиент в любое время может внести средства, с 0.00
 		BEGIN
 			SET @SUMOperate = RAND() * (@LIMIT / 10)
 			
-			--SET @DT = 0	--клиент вносит средства на счета, 0 Ц остаток по счету увеличиваетс¤
+			--SET @DT = 0	--клиент вносит средства на счета, 0 – остаток по счету увеличивается
 			SET @DT = RAND()
 			SET @TestRecordDT = CASE @DT
 					WHEN '1' THEN -1
@@ -222,12 +222,12 @@ BEGIN
 		ELSE 
 		BEGIN	
 			PRINT '@TestSaldo ' + CONVERT(VARCHAR, @TestSaldo)
-			IF (@TestSaldo = 0.00) -- –≈ƒ»“, выдача
+			IF (@TestSaldo = 0.00) --КРЕДИТ, выдача
 			BEGIN
 				SET @SUMOperate = CONVERT(INT,((RAND() * @LIMIT)/1000.00)) * 1000.00
 				SET @TestSaldo = @SUMOperate
-				SET @DT	= 1 --банк выдает деньги, 1 Ц остаток по счету уменьшаетс¤
-				SET @DTInfo = '¬џƒј„ј  –≈ƒ»“ј'
+				SET @DT	= 1 --банк выдает деньги, 1 – остаток по счету уменьшается
+				SET @DTInfo = 'ВЫДАЧА КРЕДИТА'
 				PRINT 'CREDIT ' + '@TestSaldo ' + CONVERT(VARCHAR, @TestSaldo)
 			END
 			ELSE
@@ -258,8 +258,8 @@ BEGIN
 		IF @DTInfo =''
 		BEGIN
 			SET @DTInfo = CASE @DT
-				WHEN '1' THEN '—Ќя“»≈'
-				WHEN '0' THEN '¬Ќ≈—≈Ќ»≈'
+				WHEN '1' THEN 'СНЯТИЕ'
+				WHEN '0' THEN 'ВНЕСЕНИЕ'
 			END
 		END
 		PRINT '@DT ' + CONVERT(VARCHAR, @DT) + ' @DTInfo ' + CONVERT(VARCHAR, @DTInfo) + ' @TestRecordDT ' + CONVERT(VARCHAR, @TestRecordDT)
@@ -281,9 +281,9 @@ BEGIN
 	SET @j = 1
 	SET @TestProductType = 0
 END;
---ƒЋя  ј∆ƒќ√ќ —„≈“ј «јѕ»—» (J)
+--ДЛЯ КАЖДОГО СЧЕТА ЗАПИСИ (J)
 --перебор записей не по id а по колву строк
---@DT операци¤, не зависит от типа продукта: + @DT0, - @DT1
+--@DT операция, не зависит от типа продукта: + @DT0, - @DT1
 --тестовые суммы операций без проверки выхода лимита кредита, ограничение на лимит операции
 --вывод дополнительных сведений
 
