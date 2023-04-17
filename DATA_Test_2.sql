@@ -150,7 +150,7 @@ DECLARE @TestTable TABLE ([NN] INT, [WC] INT)
 SET @i = 4
 SET @N = (SELECT COUNT(*) FROM [ACCOUNTS])	--кол-во счетов
 SET @j = 1
-SET @Nj = 5	--кол-во записей
+SET @Nj = 10	--кол-во записей
 INSERT INTO @TestTable SELECT row_number() OVER(ORDER BY [ID]) AS [I] , RID.[ID] AS [ACC_REF] FROM [ACCOUNTS] AS RID
 --select * FROM @TestTable
 DECLARE @IID INT = 1
@@ -232,21 +232,33 @@ BEGIN
 			END
 			ELSE
 			BEGIN
-				SET @SUMOperate = RAND() * (@TestSaldo / 10)
-				SET @DT = RAND()
+				--SET @SUMOperate = RAND() * (@TestSaldo / 10)
+				--кредит - только погашение без снятия, повторная выдача при 0.00
+				SET @SUMOperate = RAND() * (@LIMIT / 10)
+				SET @DT = 0
+				--SET @DT = RAND()
 				
 
 				--PRINT 'DATA ' + @TestACCID
-				
-				SET @TestRecordDT = CASE @DT
-					WHEN '1' THEN -1
-					WHEN '0' THEN 1
-				END
+				--кредит - только погашение без снятия
+				SET @TestRecordDT = -1
+
+				--SET @TestRecordDT = CASE @DT
+				--	WHEN '1' THEN -1
+				--	WHEN '0' THEN 1
+				--END
 
 				
 				SET @SUMResult = @TestSaldo + (@TestRecordDT * @SUMOperate)
+
+				--PRINT ('TEST ' + CONVERT(VARCHAR,@SUMResult))
 				IF @SUMResult < @LIMIT
 				BEGIN
+					IF @SUMResult < 0.00
+					BEGIN
+						SET @SUMOperate = @TestSaldo
+						SET @SUMResult = 0.00
+					END
 					SET @TestSaldo = @SUMResult
 				END
 				ELSE
