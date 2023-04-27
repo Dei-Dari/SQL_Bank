@@ -147,10 +147,10 @@ DECLARE @TestTable TABLE ([NN] INT, [WC] INT)
 --происходить снова, и клиент нужно опять осуществлять погашения. Если у клиента
 --продукта типа ДЕПОЗИТ или КАРТА, клиент в любое время может внести средства.
 
-SET @i = 4
+SET @i = 4		--без учета данных с Test1
 SET @N = (SELECT COUNT(*) FROM [ACCOUNTS])	--кол-во счетов
 SET @j = 1
-SET @Nj = 10	--кол-во записей
+SET @Nj = 20	--кол-во записей
 INSERT INTO @TestTable SELECT row_number() OVER(ORDER BY [ID]) AS [I] , RID.[ID] AS [ACC_REF] FROM [ACCOUNTS] AS RID
 --select * FROM @TestTable
 DECLARE @IID INT = 1
